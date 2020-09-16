@@ -1,19 +1,17 @@
-
 // The AudibleWindows class has dictionary/object that keeps track of the currently audible windows. 
 // Each key in the object is a window ID and its value is a set of ID's of the currently audible tabs.
 // As long as the size of a set is greater than zero, then its corresponding window is considered audible.
 // Otherwise, the window is considered not audible and no icon is displayed on the window title.
-
+// https://addons.mozilla.org/en-US/firefox/addon/audible-windows/
 class AudibleWindows{
-    
-    audibleWindows = Object();
-    audibilityFilter = {properties: ["audible"]}  // filer is used to invoke the listener only for the specified 'audible' property
     
     constructor(){
         // in callbacks, the 'this' keyword is bound to the calling/higher-order function context.
         // so adding a listener normally would have 'this' in the callback bound to the Window object, not the class instance.
         // to get around it, we explicitly bind the callback function to the current context i.e this object
         // where bellow, bind() returns a new function with a new context and, those are passed on immediately as callbacks.
+        this.audibleWindows = {};
+        this.audibilityFilter = {properties: ["audible"]}  // filer is used to invoke the listener only for the specified 'audible' property
         browser.tabs.onUpdated.addListener(this.handleUpdated.bind(this), this.audibilityFilter);
         browser.tabs.onRemoved.addListener(this.handleRemoved.bind(this));
         browser.tabs.onDetached.addListener(this.handleDetached.bind(this));
