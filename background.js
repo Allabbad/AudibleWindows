@@ -18,10 +18,6 @@ class AudibleWindows{
     };
 
     removeAudible(tabId, windowId){
-        console.log(this.audibleWindows);
-        console.log("removing")
-        console.log(windowId)
-        console.log(tabId)
         this.audibleWindows[windowId].delete(tabId);
         if (this.audibleWindows[windowId].size == 0){            // if the window has no other audible tabs
             delete this.audibleWindows[windowId]                 // then remove window from audibleWindows
@@ -33,14 +29,10 @@ class AudibleWindows{
     };
     
     handleUpdated(tabId, changeInfo, tabInfo) {
-        console.log("updating")
-        console.log(this.audibleWindows)
         let WID = tabInfo.windowId;
         if (changeInfo.audible){                                // if the detected change was a tab becoming audible
             if (!this.audibleWindows.hasOwnProperty(WID)){      // then check if its corresponding window exists in audibleWindows
                 this.audibleWindows[WID] = new Set([tabId]);    // if not then add the window to the list and add the audible tab to it
-                console.log("created audible window/tab")
-                console.log(this.audibleWindows)
             }
             else{                                               // but if the window exists then just add the tab to it
                 this.audibleWindows[WID].add(tabId);
@@ -56,7 +48,6 @@ class AudibleWindows{
   }
   
     handleRemoved(tabId, removeInfo) {                          // handle the case of tab removal as opposed to audio being paused
-        console.log("removed tab")
         let WID = removeInfo.windowId;
         if (removeInfo.isWindowClosing){                        // if window is closing, just remove it from audibleWindows 
             delete this.audibleWindows[WID]; 
@@ -67,7 +58,6 @@ class AudibleWindows{
   }
     
     handleDetached(tabId, detachInfo) {                         // only need to deal with the old window. The new window is taken care of by the onUpdated callback
-        console.log("detached tab")
         let WID = detachInfo.oldWindowId;
         if (this.audibleWindows.hasOwnProperty(WID)){
             this.removeAudible(tabId, WID)
