@@ -11,7 +11,7 @@ class AudibleWindows{
         // to get around it, we explicitly bind the callback function to the current context i.e this object
         // where bellow, bind() returns a new function with a new context and, those are passed on immediately as callbacks.
         this.audibleWindows = {};
-        this.audibilityFilter = {properties: ["audible"]}  // filer is used to invoke the listener only for the specified 'audible' property
+        this.audibilityFilter = {properties: ["audible"]}  // filter is used to invoke the listener only for the specified 'audible' property
         browser.tabs.onUpdated.addListener(this.handleUpdated.bind(this), this.audibilityFilter);
         browser.tabs.onRemoved.addListener(this.handleRemoved.bind(this));
         browser.tabs.onDetached.addListener(this.handleDetached.bind(this));
@@ -45,7 +45,7 @@ class AudibleWindows{
         else{                                                   // if the detected change was a tab becoming inaudible 
             this.removeAudible(tabId, WID);                     // then remove the tab and the window if it has no other tabs
         }
-  }
+    }
   
     handleRemoved(tabId, removeInfo) {                          // handle the case of tab removal as opposed to audio being paused
         let WID = removeInfo.windowId;
@@ -55,7 +55,7 @@ class AudibleWindows{
         else{                                                   // but if window is not closing, again remove tab/window
             this.removeAudible(tabId, WID);
         }  
-  }
+    }
     
     handleDetached(tabId, detachInfo) {                         // only need to deal with the old window. The new window is taken care of by the onUpdated callback
         let WID = detachInfo.oldWindowId;
